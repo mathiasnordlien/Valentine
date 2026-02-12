@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="no">
 <head>
   <meta charset="utf-8" />
@@ -15,16 +16,24 @@
     }
 
     *{box-sizing:border-box}
+
     body{
-      margin:0; min-height:100vh; display:grid; place-items:center;
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:start center;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--ink);
+
       background:
         radial-gradient(900px 500px at 15% 10%, rgba(255,240,246,.95), transparent 60%),
         radial-gradient(700px 420px at 85% 25%, rgba(255,154,199,.55), transparent 60%),
         radial-gradient(800px 520px at 50% 95%, rgba(255,61,147,.22), transparent 65%),
         linear-gradient(135deg, var(--p100), var(--p400));
-      overflow:hidden;
+
+      overflow-x:hidden;
+      overflow-y:auto;
+      padding:18px 12px;
     }
 
     .card{
@@ -37,6 +46,7 @@
       border:1px solid rgba(255,61,147,.18);
       position:relative;
       overflow:hidden;
+      margin-top: 10px;
     }
 
     .sparkles{
@@ -124,7 +134,6 @@
       z-index:2;
     }
 
-    /* NEI: konstant bevegelse + ikke klikkbar */
     #noBtn{
       position:absolute;
       left:10px; top:10px;
@@ -134,7 +143,6 @@
       pointer-events:none;
     }
 
-    /* Modals */
     .overlay{
       position:fixed; inset:0;
       background:rgba(58,11,34,.55);
@@ -142,6 +150,7 @@
       place-items:center;
       padding:18px;
       z-index:50;
+      overflow-y:auto;
     }
     .overlay.show{ display:grid; }
 
@@ -188,7 +197,6 @@
       background:linear-gradient(135deg, var(--p500), var(--p700));
     }
 
-    /* mini message box */
     .mini{
       margin-top:10px;
       padding:12px 14px;
@@ -202,7 +210,6 @@
     }
     .mini.show{ display:block; }
 
-    /* confetti emojis */
     .floaty{
       position:fixed;
       top:-10vh;
@@ -210,20 +217,47 @@
       transition: transform 1.6s linear, top 1.6s linear, opacity 1.6s linear;
       pointer-events:none;
     }
+
+    @media (max-width: 480px){
+      .hero{ height: 200px; }
+      .stage{ height: 150px; }
+      .modal img{ height: 260px; }
+    }
+
+    /* Final state: rosa bakgrunn + bare tekst */
+    body.final{
+      place-items:center;
+      padding:0;
+      overflow:hidden;
+      background: linear-gradient(135deg, var(--p100), var(--p500));
+    }
+    .finalScreen{
+      display:none;
+      text-align:center;
+      padding:24px;
+      color:var(--ink);
+      font-weight:950;
+      letter-spacing:.2px;
+      font-size: clamp(22px, 4vw, 40px);
+    }
+    body.final .finalScreen{ display:block; }
+    body.final .card{ display:none; }
   </style>
 </head>
 
 <body>
+  <!-- Final tekst (vises kun helt til slutt) -->
+  <div class="finalScreen">Du har en date og kan ikke velge flere valentines &lt;3</div>
+
   <div class="card">
     <div class="sparkles"></div>
 
-    <!-- Forsidebilde -->
     <div class="hero">
       <img src="bilde1.jpg" alt="Bilde" />
     </div>
 
     <div class="question">Vil du være min valentine? 💘</div>
-    <div class="sub">Svare ditt kan du registrere nedenfor</div>
+    <div class="sub">Nei-knappen er på flukt. Det er bare én vei her 😈</div>
 
     <div class="stage" id="stage">
       <div class="buttons">
@@ -285,7 +319,7 @@
 
         <div class="row">
           <button class="primary" id="revealBtn">Vil du vite mer?</button>
-          <button class="ghost" id="closeQ">Lukk</button>
+          <button class="ghost" id="closeQ">Avslutt</button>
         </div>
 
         <div class="mini" id="miniMsg">
@@ -312,7 +346,7 @@
     const closeQ = document.getElementById('closeQ');
     const miniMsg = document.getElementById('miniMsg');
 
-    // ---------- NEI: konstant bevegelse + dodge cursor ----------
+    // NEI: konstant bevegelse + dodge cursor
     let x = 10, y = 10;
     let vx = 2.8, vy = 2.2;
     let mouseX = 9999, mouseY = 9999;
@@ -358,10 +392,19 @@
     }
     requestAnimationFrame(tickNoBtn);
 
-    // ---------- Modal flow ----------
+    // Helpers
+    function openOverlay(el){
+      el.classList.add('show');
+      el.setAttribute('aria-hidden','false');
+    }
+    function closeOverlay(el){
+      el.classList.remove('show');
+      el.setAttribute('aria-hidden','true');
+    }
+
+    // Flow
     yesBtn.addEventListener('click', () => {
-      overlayYes.classList.add('show');
-      overlayYes.setAttribute('aria-hidden', 'false');
+      openOverlay(overlayYes);
       confettiHearts();
     });
 
@@ -374,7 +417,6 @@
 
     endMore.addEventListener('click', () => {
       closeOverlay(overlayMore);
-      // reset mini-message hver gang
       miniMsg.classList.remove('show');
       openOverlay(overlayQ);
     });
@@ -383,21 +425,15 @@
       miniMsg.classList.add('show');
     });
 
-    closeQ.addEventListener('click', () => closeOverlay(overlayQ));
+    // AVSLUTT HELT TIL SLUTT -> final screen
+    closeQ.addEventListener('click', () => {
+      closeOverlay(overlayQ);
+      document.body.classList.add('final');
+    });
 
-    // klikk utenfor modal lukker (for de som liker “escape”)
+    // Click outside to close (ikke på siste, ellers blir det “oops”)
     overlayYes.addEventListener('click', (e) => { if (e.target === overlayYes) closeOverlay(overlayYes); });
     overlayMore.addEventListener('click', (e) => { if (e.target === overlayMore) closeOverlay(overlayMore); });
-    overlayQ.addEventListener('click', (e) => { if (e.target === overlayQ) closeOverlay(overlayQ); });
-
-    function openOverlay(el){
-      el.classList.add('show');
-      el.setAttribute('aria-hidden','false');
-    }
-    function closeOverlay(el){
-      el.classList.remove('show');
-      el.setAttribute('aria-hidden','true');
-    }
 
     function confettiHearts() {
       const amount = 26;
