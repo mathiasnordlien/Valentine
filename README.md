@@ -224,7 +224,7 @@
     </div>
 
     <div class="question">Vil du være min valentine? 💘</div>
-    <div class="sub">Nei-knappen er på flukt. Det er bare én vei her 😈</div>
+    <div class="sub">Svare ditt kan du registrere nedenfor</div>
 
     <div class="stage" id="stage">
       <div class="buttons">
