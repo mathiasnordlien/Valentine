@@ -71,7 +71,7 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(180deg, rgba(255,61,147,.10), rgba(255,61,147,.18));
+      background:linear-gradient(180deg, rgba(255,61,147,.08), rgba(255,61,147,.18));
       pointer-events:none;
     }
 
@@ -135,7 +135,7 @@
       pointer-events:none;
     }
 
-    /* Modal */
+    /* Modals */
     .overlay{
       position:fixed; inset:0;
       background:rgba(58,11,34,.55);
@@ -147,7 +147,7 @@
     .overlay.show{ display:grid; }
 
     .modal{
-      width:min(560px,94vw);
+      width:min(580px,94vw);
       background:rgba(255,240,246,.92);
       border:1px solid rgba(255,61,147,.18);
       border-radius:26px;
@@ -168,7 +168,7 @@
 
     .content{ padding:18px 18px 22px; text-align:center; }
     .content h2{ margin:8px 0 10px; font-size:28px; }
-    .content p{ margin:0 0 16px; line-height:1.5; opacity:.95; }
+    .content p{ margin:0 0 16px; line-height:1.55; opacity:.95; text-align:left; }
 
     .row{
       display:flex;
@@ -184,6 +184,24 @@
       box-shadow:none;
       font-weight:900;
     }
+    .primary{
+      color:#fff;
+      background:linear-gradient(135deg, var(--p500), var(--p700));
+    }
+
+    /* mini message box */
+    .mini{
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.65);
+      border:1px solid rgba(255,61,147,.18);
+      box-shadow:var(--shadow2);
+      font-weight:850;
+      text-align:center;
+      display:none;
+    }
+    .mini.show{ display:block; }
 
     /* confetti emojis */
     .floaty{
@@ -200,13 +218,13 @@
   <div class="card">
     <div class="sparkles"></div>
 
-    <!-- Bilde på forsiden -->
+    <!-- Forsidebilde -->
     <div class="hero">
-      <img src="bilde1.jpg" alt="Bilde av dere" />
+      <img src="bilde1.jpg" alt="Bilde" />
     </div>
 
     <div class="question">Vil du være min valentine? 💘</div>
-    <div class="sub">Elsker deg!</div>
+    <div class="sub">Nei-knappen er på flukt. Det er bare én vei her 😈</div>
 
     <div class="stage" id="stage">
       <div class="buttons">
@@ -216,18 +234,63 @@
     </div>
   </div>
 
-  <!-- Modal (etter JA) -->
+  <!-- Modal 1: Etter JA -->
   <div class="overlay" id="overlayYes" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Svar">
-      <!-- Bilde i JA-boksen -->
-      <img src="bilde2.jpg" alt="Bilde av dere" />
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Svar JA">
+      <img src="bilde2.jpg" alt="Bilde" />
       <div class="content">
-        <h2>Yesss!🥹💞</h2>
-        <p>
-          Da er det offisielt. Du er min valentine!
+        <h2>Yesss! 🥹💞</h2>
+        <p style="text-align:center;margin-bottom:16px;">
+          Ok, da er det offisielt. Du er min valentine. 🌹
         </p>
         <div class="row">
+          <button class="primary" id="moreBtn">Les mer om din valentine</button>
           <button class="ghost" id="closeYes">Lukk</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Les mer om din valentine -->
+  <div class="overlay" id="overlayMore" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Om din valentine">
+      <img src="bilde1.jpg" alt="Bilde" />
+      <div class="content">
+        <h2>Om din valentine 💗</h2>
+        <p>
+          Mathias møtte Emilie på videregående – og siden da har han vært helt ærlig: ekstremt heldig.
+          I åtte år har du vært den beste “valentinen” han kunne fått.
+          <br><br>
+          Han er skikkelig forelska i deg, og det største ønsket hans er å få dele selve valentinsdagen med deg.
+          Når han ser på deg, tenker han at han har funnet drømmedama. Han er så glad for den du er – og han er stolt av deg, på ekte.
+          <br><br>
+          Og så går det rykter… 👀 En liten baby på vei.
+          Mathias klarer ikke å vente. Han mener barnet kommer til å bli det fineste mennesket i verden –
+          spesielt når det kommer fra deg. 💞
+        </p>
+        <div class="row">
+          <button class="ghost" id="endMore">Avslutt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Vil du vite mer? -->
+  <div class="overlay" id="overlayQ" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Vil du vite mer">
+      <div class="content">
+        <h2>Vil du vite mer? 😇</h2>
+        <p style="text-align:center;margin-bottom:10px;">
+          Trykk på knappen, så får du siste “insight”.
+        </p>
+
+        <div class="row">
+          <button class="primary" id="revealBtn">Vil du vite mer?</button>
+          <button class="ghost" id="closeQ">Lukk</button>
+        </div>
+
+        <div class="mini" id="miniMsg">
+          Jeg elsker deg og gleder meg til helga! &lt;3
         </div>
       </div>
     </div>
@@ -239,11 +302,20 @@
     const yesBtn = document.getElementById('yesBtn');
 
     const overlayYes = document.getElementById('overlayYes');
-    const closeYes = document.getElementById('closeYes');
+    const overlayMore = document.getElementById('overlayMore');
+    const overlayQ = document.getElementById('overlayQ');
 
-    // NEI: konstant bevegelse + dodge cursor
+    const closeYes = document.getElementById('closeYes');
+    const moreBtn = document.getElementById('moreBtn');
+    const endMore = document.getElementById('endMore');
+
+    const revealBtn = document.getElementById('revealBtn');
+    const closeQ = document.getElementById('closeQ');
+    const miniMsg = document.getElementById('miniMsg');
+
+    // ---------- NEI: konstant bevegelse + dodge cursor ----------
     let x = 10, y = 10;
-    let vx = 2.7, vy = 2.1;
+    let vx = 2.8, vy = 2.2;
     let mouseX = 9999, mouseY = 9999;
 
     stage.addEventListener('mousemove', (e) => {
@@ -270,12 +342,12 @@
       const dx = cx - mouseX, dy = cy - mouseY;
       const dist = Math.hypot(dx, dy);
 
-      if (dist < 120) {
-        const push = 0.9;
+      if (dist < 125) {
+        const push = 1.0;
         vx += (dx / (dist || 1)) * push;
         vy += (dy / (dist || 1)) * push;
 
-        const maxV = 5.3;
+        const maxV = 5.6;
         vx = Math.max(-maxV, Math.min(maxV, vx));
         vy = Math.max(-maxV, Math.min(maxV, vy));
       }
@@ -287,21 +359,46 @@
     }
     requestAnimationFrame(tickNoBtn);
 
-    // Modal
+    // ---------- Modal flow ----------
     yesBtn.addEventListener('click', () => {
       overlayYes.classList.add('show');
       overlayYes.setAttribute('aria-hidden', 'false');
       confettiHearts();
     });
 
-    closeYes.addEventListener('click', () => {
-      overlayYes.classList.remove('show');
-      overlayYes.setAttribute('aria-hidden', 'true');
+    closeYes.addEventListener('click', () => closeOverlay(overlayYes));
+
+    moreBtn.addEventListener('click', () => {
+      closeOverlay(overlayYes);
+      openOverlay(overlayMore);
     });
 
-    overlayYes.addEventListener('click', (e) => {
-      if (e.target === overlayYes) closeYes.click();
+    endMore.addEventListener('click', () => {
+      closeOverlay(overlayMore);
+      // reset mini-message hver gang
+      miniMsg.classList.remove('show');
+      openOverlay(overlayQ);
     });
+
+    revealBtn.addEventListener('click', () => {
+      miniMsg.classList.add('show');
+    });
+
+    closeQ.addEventListener('click', () => closeOverlay(overlayQ));
+
+    // klikk utenfor modal lukker (for de som liker “escape”)
+    overlayYes.addEventListener('click', (e) => { if (e.target === overlayYes) closeOverlay(overlayYes); });
+    overlayMore.addEventListener('click', (e) => { if (e.target === overlayMore) closeOverlay(overlayMore); });
+    overlayQ.addEventListener('click', (e) => { if (e.target === overlayQ) closeOverlay(overlayQ); });
+
+    function openOverlay(el){
+      el.classList.add('show');
+      el.setAttribute('aria-hidden','false');
+    }
+    function closeOverlay(el){
+      el.classList.remove('show');
+      el.setAttribute('aria-hidden','true');
+    }
 
     function confettiHearts() {
       const amount = 26;
