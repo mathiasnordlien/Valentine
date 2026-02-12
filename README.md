@@ -1,7 +1,9 @@
+<!doctype html>
 <html lang="no">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- Ingen "Valentine" i fanetittel -->
   <title>💗</title>
 
   <style>
@@ -14,8 +16,9 @@
       --shadow2: 0 14px 28px rgba(58,11,34,.12);
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
 
+    /* Scroll fix + rosa bakgrunn */
     body{
       margin:0;
       min-height:100vh;
@@ -35,6 +38,9 @@
       padding:18px 12px;
     }
 
+    /* KILL “blå Valentine”-header hvis den kommer fra en template */
+    header, .header, .topbar, .navbar, .brand, .site-title, #header, #navbar { display:none !important; }
+
     .card{
       width:min(640px,92vw);
       border-radius:26px;
@@ -45,7 +51,7 @@
       border:1px solid rgba(255,61,147,.18);
       position:relative;
       overflow:hidden;
-      margin-top: 10px;
+      margin-top:10px;
     }
 
     .sparkles{
@@ -90,6 +96,7 @@
       font-weight:950;
       letter-spacing:.2px;
     }
+
     .sub{
       margin:0 0 16px;
       text-align:center;
@@ -133,6 +140,7 @@
       z-index:2;
     }
 
+    /* NEI: konstant bevegelse + umulig å trykke */
     #noBtn{
       position:absolute;
       left:10px; top:10px;
@@ -142,6 +150,7 @@
       pointer-events:none;
     }
 
+    /* Modals */
     .overlay{
       position:fixed; inset:0;
       background:rgba(58,11,34,.55);
@@ -223,7 +232,7 @@
       .modal img{ height: 260px; }
     }
 
-    /* Final state: rosa bakgrunn + bare tekst */
+    /* Final state */
     body.final{
       place-items:center;
       padding:0;
@@ -233,7 +242,7 @@
     .finalScreen{
       display:none;
       text-align:center;
-      padding:24px;
+      padding:28px;
       color:var(--ink);
       font-weight:950;
       letter-spacing:.2px;
@@ -245,18 +254,19 @@
 </head>
 
 <body>
-  <!-- Final tekst (vises kun helt til slutt) -->
+  <!-- Final tekst -->
   <div class="finalScreen">Du har en date og kan ikke velge flere valentines &lt;3</div>
 
   <div class="card">
     <div class="sparkles"></div>
 
+    <!-- Forsidebilde -->
     <div class="hero">
       <img src="mathias1.jpg" alt="Bilde" />
     </div>
 
     <div class="question">Vil du være min valentine? 💘</div>
-    <div class="sub">Gi ditt svar nedenfor</div>
+    <div class="sub">Nei-knappen er på flukt. Det er bare én vei her 😈</div>
 
     <div class="stage" id="stage">
       <div class="buttons">
@@ -268,12 +278,12 @@
 
   <!-- Modal 1: Etter JA -->
   <div class="overlay" id="overlayYes" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Svar JA">
+    <div class="modal" role="dialog" aria-modal="true">
       <img src="mathias2.jpg" alt="Bilde" />
       <div class="content">
-        <h2>Yesss!🥹💞</h2>
+        <h2>Yesss! 🥹💞</h2>
         <p style="text-align:center;margin-bottom:16px;">
-          Da er det offisielt - Du er min valentine!
+          Ok, da er det offisielt. Du er min valentine. 🌹
         </p>
         <div class="row">
           <button class="primary" id="moreBtn">Les mer om din valentine</button>
@@ -283,9 +293,9 @@
     </div>
   </div>
 
-  <!-- Modal 2: Les mer om din valentine -->
+  <!-- Modal 2: Les mer -->
   <div class="overlay" id="overlayMore" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Om din valentine">
+    <div class="modal" role="dialog" aria-modal="true">
       <img src="mathias3.jpg" alt="Bilde" />
       <div class="content">
         <h2>Om din valentine 💗</h2>
@@ -309,7 +319,7 @@
 
   <!-- Modal 3: Vil du vite mer? -->
   <div class="overlay" id="overlayQ" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Vil du vite mer">
+    <div class="modal" role="dialog" aria-modal="true">
       <div class="content">
         <h2>Vil du vite mer? 😇</h2>
         <p style="text-align:center;margin-bottom:10px;">
@@ -391,7 +401,6 @@
     }
     requestAnimationFrame(tickNoBtn);
 
-    // Helpers
     function openOverlay(el){
       el.classList.add('show');
       el.setAttribute('aria-hidden','false');
@@ -424,13 +433,13 @@
       miniMsg.classList.add('show');
     });
 
-    // AVSLUTT HELT TIL SLUTT -> final screen
+    // End: final screen
     closeQ.addEventListener('click', () => {
       closeOverlay(overlayQ);
       document.body.classList.add('final');
     });
 
-    // Click outside to close (ikke på siste, ellers blir det “oops”)
+    // Click outside to close (ikke siste)
     overlayYes.addEventListener('click', (e) => { if (e.target === overlayYes) closeOverlay(overlayYes); });
     overlayMore.addEventListener('click', (e) => { if (e.target === overlayMore) closeOverlay(overlayMore); });
 
