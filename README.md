@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Valentine? 💗</title>
+  <title>Valentine 2026💗</title>
 
   <style>
     :root{
