@@ -265,7 +265,7 @@
     </div>
 
     <div class="question">Vil du være min valentine? 💘</div>
-    <div class="sub">Nei-knappen er på flukt. Det er bare én vei her 😈</div>
+    <div class="sub">Registrer ditt svar nedenfor</div>
 
     <div class="stage" id="stage">
       <div class="buttons">
@@ -280,9 +280,9 @@
     <div class="modal" role="dialog" aria-modal="true">
       <img src="mathias2.jpg" alt="Bilde" />
       <div class="content">
-        <h2>Yesss! 🥹💞</h2>
+        <h2>Yesss!🥹💞</h2>
         <p style="text-align:center;margin-bottom:16px;">
-          Ok, da er det offisielt. Du er min valentine. 🌹
+          Da er det offisielt - Du er min valentine!
         </p>
         <div class="row">
           <button class="primary" id="moreBtn">Les mer om din valentine</button>
@@ -299,7 +299,7 @@
       <div class="content">
         <h2>Om din valentine 💗</h2>
         <p>
-          Mathias møtte Emilie på videregående – og siden da har han vært helt ærlig: ekstremt heldig.
+          Mathias møtte Emilie på videregående – og siden da har han vært ekstremt heldig.
           I åtte år har du vært den beste “valentinen” han kunne fått.
           <br><br>
           Han er skikkelig forelska i deg, og det største ønsket hans er å få dele selve valentinsdagen med deg.
@@ -331,7 +331,7 @@
         </div>
 
         <div class="mini" id="miniMsg">
-          Jeg elsker deg og gleder meg til helga! &lt;3
+          Jeg elsker deg og gleder meg til helga - du er alt!💓
         </div>
       </div>
     </div>
