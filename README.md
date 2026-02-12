@@ -29,9 +29,9 @@
     }
 
     .card{
-      width:min(620px,92vw);
+      width:min(640px,92vw);
       border-radius:26px;
-      padding:26px;
+      padding:18px 18px 22px;
       background:var(--card);
       backdrop-filter:blur(10px);
       box-shadow:var(--shadow);
@@ -49,16 +49,41 @@
         radial-gradient(circle at 22% 78%, rgba(255,61,147,.25) 0 5px, transparent 6px);
     }
 
-    .question{
-      margin: 6px 0 14px;
-      text-align:center;
-      font-size:clamp(26px,4vw,40px);
-      font-weight:900;
-      letter-spacing:.2px;
+    .hero{
+      width:100%;
+      height:280px;
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid rgba(255,61,147,.18);
+      box-shadow:var(--shadow2);
+      background:rgba(255,255,255,.35);
+      position:relative;
+      margin-bottom:14px;
+    }
+    .hero img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(1.05) contrast(1.02);
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,61,147,.10), rgba(255,61,147,.18));
+      pointer-events:none;
     }
 
+    .question{
+      margin: 4px 0 10px;
+      text-align:center;
+      font-size:clamp(26px,4vw,40px);
+      font-weight:950;
+      letter-spacing:.2px;
+    }
     .sub{
-      margin:0 0 18px;
+      margin:0 0 16px;
       text-align:center;
       opacity:.9;
       font-weight:650;
@@ -100,17 +125,17 @@
       z-index:2;
     }
 
-    /* NEI: konstant bevegelse + umulig å trykke */
+    /* NEI: konstant bevegelse + ikke klikkbar */
     #noBtn{
       position:absolute;
       left:10px; top:10px;
       color:#fff;
       background:linear-gradient(135deg, var(--p300), var(--p600));
       z-index:1;
-      pointer-events:none; /* <- gjør den i praksis umulig å klikke */
+      pointer-events:none;
     }
 
-    /* Modal base */
+    /* Modal */
     .overlay{
       position:fixed; inset:0;
       background:rgba(58,11,34,.55);
@@ -160,9 +185,13 @@
       font-weight:900;
     }
 
-    .primary{
-      color:#fff;
-      background:linear-gradient(135deg, var(--p500), var(--p700));
+    /* confetti emojis */
+    .floaty{
+      position:fixed;
+      top:-10vh;
+      z-index:60;
+      transition: transform 1.6s linear, top 1.6s linear, opacity 1.6s linear;
+      pointer-events:none;
     }
   </style>
 </head>
@@ -171,8 +200,13 @@
   <div class="card">
     <div class="sparkles"></div>
 
-    <div class="question">Vil du være min Valentine?💘</div>
-    <div class="sub">Velg rolig. “Nei” er ikke et reelt alternativ. 😈</div>
+    <!-- Bilde på forsiden -->
+    <div class="hero">
+      <img src="bilde1.jpg" alt="Bilde av dere" />
+    </div>
+
+    <div class="question">Vil du være min valentine? 💘</div>
+    <div class="sub">Elsker deg!</div>
 
     <div class="stage" id="stage">
       <div class="buttons">
@@ -182,41 +216,18 @@
     </div>
   </div>
 
-  <!-- Modal 1 (etter JA) -->
-  <div class="overlay" id="overlay1" aria-hidden="true">
+  <!-- Modal (etter JA) -->
+  <div class="overlay" id="overlayYes" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Svar">
-      <img src="bilde1.jpg" alt="Bilde av dere" />
-      <div class="content">
-        <h2>Ok, deal! 🥹💞</h2>
-        <p>Du trykket JA. Og jeg tar det som et livslangt ja. 🌹</p>
-        <div class="row">
-          <button class="primary" id="aboutBtn">Om din valentine</button>
-          <button class="ghost" id="close1">Lukk</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 2 (Om din valentine) -->
-  <div class="overlay" id="overlay2" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Om din valentine">
+      <!-- Bilde i JA-boksen -->
       <img src="bilde2.jpg" alt="Bilde av dere" />
       <div class="content">
-        <h2>Om din valentine 💗</h2>
+        <h2>Yesss!🥹💞</h2>
         <p>
-          Mathias møtte Emilie på videregående – og helt ærlig: han har vært sykt heldig
-          med valentiner i åtte år nå. Han er skikkelig forelska i deg, og det største ønsket hans
-          er å få dele selve valentinsdagen med deg.
-          <br><br>
-          Når han ser på deg, tenker han at han har funnet drømmedama. Han er utrolig glad
-          for den du er – og han er stolt av deg, på ekte.
-          <br><br>
-          Og så går det rykter… om at en liten baby er på vei 👀 Mathias klarer uansett ikke å vente.
-          Han mener barnet kommer til å bli det fineste mennesket i verden – spesielt når det kommer fra deg. 💞
+          Da er det offisielt. Du er min valentine!
         </p>
         <div class="row">
-          <button class="ghost" id="backBtn">Tilbake</button>
-          <button class="ghost" id="close2">Lukk</button>
+          <button class="ghost" id="closeYes">Lukk</button>
         </div>
       </div>
     </div>
@@ -227,17 +238,12 @@
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
 
-    const overlay1 = document.getElementById('overlay1');
-    const overlay2 = document.getElementById('overlay2');
+    const overlayYes = document.getElementById('overlayYes');
+    const closeYes = document.getElementById('closeYes');
 
-    const close1 = document.getElementById('close1');
-    const close2 = document.getElementById('close2');
-    const aboutBtn = document.getElementById('aboutBtn');
-    const backBtn = document.getElementById('backBtn');
-
-    // ---- NEI: konstant bevegelse (bouncer rundt) + dodger musepeker ----
+    // NEI: konstant bevegelse + dodge cursor
     let x = 10, y = 10;
-    let vx = 2.6, vy = 2.1;
+    let vx = 2.7, vy = 2.1;
     let mouseX = 9999, mouseY = 9999;
 
     stage.addEventListener('mousemove', (e) => {
@@ -250,36 +256,26 @@
       const s = stage.getBoundingClientRect();
       const b = noBtn.getBoundingClientRect();
 
-      const w = s.width;
-      const h = s.height;
-      const bw = b.width;
-      const bh = b.height;
+      const w = s.width, h = s.height;
+      const bw = b.width, bh = b.height;
 
-      // flytt
-      x += vx;
-      y += vy;
+      x += vx; y += vy;
 
-      // bounce i kantene
       if (x <= 6) { x = 6; vx *= -1; }
       if (y <= 6) { y = 6; vy *= -1; }
       if (x >= w - bw - 6) { x = w - bw - 6; vx *= -1; }
       if (y >= h - bh - 6) { y = h - bh - 6; vy *= -1; }
 
-      // dodge musepekeren: hvis du kommer nær, så skifter den retning
-      const cx = x + bw/2;
-      const cy = y + bh/2;
-      const dx = cx - mouseX;
-      const dy = cy - mouseY;
+      const cx = x + bw/2, cy = y + bh/2;
+      const dx = cx - mouseX, dy = cy - mouseY;
       const dist = Math.hypot(dx, dy);
 
-      if (dist < 110) {
-        // push bort fra cursor
+      if (dist < 120) {
         const push = 0.9;
         vx += (dx / (dist || 1)) * push;
         vy += (dy / (dist || 1)) * push;
 
-        // cap fart så den ikke blir helt kaos
-        const maxV = 5.2;
+        const maxV = 5.3;
         vx = Math.max(-maxV, Math.min(maxV, vx));
         vy = Math.max(-maxV, Math.min(maxV, vy));
       }
@@ -291,55 +287,31 @@
     }
     requestAnimationFrame(tickNoBtn);
 
-    // ---- Modaler ----
+    // Modal
     yesBtn.addEventListener('click', () => {
-      overlay1.classList.add('show');
-      overlay1.setAttribute('aria-hidden', 'false');
+      overlayYes.classList.add('show');
+      overlayYes.setAttribute('aria-hidden', 'false');
       confettiHearts();
     });
 
-    close1.addEventListener('click', () => {
-      overlay1.classList.remove('show');
-      overlay1.setAttribute('aria-hidden', 'true');
+    closeYes.addEventListener('click', () => {
+      overlayYes.classList.remove('show');
+      overlayYes.setAttribute('aria-hidden', 'true');
     });
 
-    aboutBtn.addEventListener('click', () => {
-      overlay1.classList.remove('show');
-      overlay1.setAttribute('aria-hidden', 'true');
-
-      overlay2.classList.add('show');
-      overlay2.setAttribute('aria-hidden', 'false');
+    overlayYes.addEventListener('click', (e) => {
+      if (e.target === overlayYes) closeYes.click();
     });
-
-    backBtn.addEventListener('click', () => {
-      overlay2.classList.remove('show');
-      overlay2.setAttribute('aria-hidden', 'true');
-
-      overlay1.classList.add('show');
-      overlay1.setAttribute('aria-hidden', 'false');
-    });
-
-    close2.addEventListener('click', () => {
-      overlay2.classList.remove('show');
-      overlay2.setAttribute('aria-hidden', 'true');
-    });
-
-    // klikk utenfor modal lukker
-    overlay1.addEventListener('click', (e) => { if (e.target === overlay1) close1.click(); });
-    overlay2.addEventListener('click', (e) => { if (e.target === overlay2) close2.click(); });
 
     function confettiHearts() {
       const amount = 26;
       for (let i = 0; i < amount; i++) {
         const el = document.createElement('div');
+        el.className = "floaty";
         el.textContent = Math.random() > 0.5 ? "💖" : "💗";
-        el.style.position = "fixed";
         el.style.left = Math.random() * 100 + "vw";
-        el.style.top = "-10vh";
         el.style.fontSize = (16 + Math.random() * 18) + "px";
         el.style.transform = `rotate(${Math.random() * 80 - 40}deg)`;
-        el.style.zIndex = 60;
-        el.style.transition = "transform 1.6s linear, top 1.6s linear, opacity 1.6s linear";
         document.body.appendChild(el);
 
         requestAnimationFrame(() => {
