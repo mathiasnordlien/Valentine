@@ -171,7 +171,7 @@
   <div class="card">
     <div class="sparkles"></div>
 
-    <div class="question">Vil du være min Valentine? 💘</div>
+    <div class="question">Vil du være min Valentine?💘</div>
     <div class="sub">Velg rolig. “Nei” er ikke et reelt alternativ. 😈</div>
 
     <div class="stage" id="stage">
