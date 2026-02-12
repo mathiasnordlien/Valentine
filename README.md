@@ -253,11 +253,11 @@
     <div class="sparkles"></div>
 
     <div class="hero">
-      <img src="bilde1.jpg" alt="Bilde" />
+      <img src="mathias1.jpg" alt="Bilde" />
     </div>
 
     <div class="question">Vil du være min valentine? 💘</div>
-    <div class="sub">Nei-knappen er på flukt. Det er bare én vei her 😈</div>
+    <div class="sub">Gi ditt svar nedenfor</div>
 
     <div class="stage" id="stage">
       <div class="buttons">
@@ -270,11 +270,11 @@
   <!-- Modal 1: Etter JA -->
   <div class="overlay" id="overlayYes" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Svar JA">
-      <img src="bilde2.jpg" alt="Bilde" />
+      <img src="mathias2.jpg" alt="Bilde" />
       <div class="content">
-        <h2>Yesss! 🥹💞</h2>
+        <h2>Yesss!🥹💞</h2>
         <p style="text-align:center;margin-bottom:16px;">
-          Ok, da er det offisielt. Du er min valentine. 🌹
+          Da er det offisielt - Du er min valentine!
         </p>
         <div class="row">
           <button class="primary" id="moreBtn">Les mer om din valentine</button>
@@ -287,7 +287,7 @@
   <!-- Modal 2: Les mer om din valentine -->
   <div class="overlay" id="overlayMore" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Om din valentine">
-      <img src="bilde1.jpg" alt="Bilde" />
+      <img src="mathias3.jpg" alt="Bilde" />
       <div class="content">
         <h2>Om din valentine 💗</h2>
         <p>
